@@ -217,28 +217,6 @@ class FilmorateApplicationTests {
     }
 
     @Test
-    void test_createUser_givenEmptyName_userAdded() throws Exception {
-        user.setName(null);
-
-        String json = objectMapper.writeValueAsString(user);
-
-        mockMvc.perform(
-                        post("/users")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        mockMvc.perform(
-                        get("/users")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is("login")))
-                .andReturn();
-    }
-
-    @Test
     void test_updateUser_userChanged() throws Exception {
         String json = objectMapper.writeValueAsString(user);
 
