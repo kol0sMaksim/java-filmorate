@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -7,15 +8,17 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final Map<Long, User> users = new HashMap<>();
+    private final Map<Long, User> users = new ConcurrentHashMap<>();
+
+    private long currentMaxId;
 
     @GetMapping
     public Collection<User> getAllUsers() {
@@ -66,7 +69,7 @@ public class UserController {
     }
 
     public void validationUserName(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
+        if (StringUtils.isBlank(user.getName())) {
             user.setName(user.getLogin());
             log.debug(
                     "В запросе на обновление пользователя с id={} отсутствует поле name, будет использовано поле login",
@@ -76,11 +79,6 @@ public class UserController {
     }
 
     private long getNextId() {
-        long currentMaxId = users.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
         return ++currentMaxId;
     }
 }

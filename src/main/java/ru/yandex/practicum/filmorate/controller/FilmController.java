@@ -7,15 +7,17 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 @RestController
 @RequestMapping("/films")
 public class FilmController {
 
-    private final Map<Long, Film> films = new HashMap<>();
+    private final Map<Long, Film> films = new ConcurrentHashMap<>();
+
+    private long currentMaxId;
 
     @GetMapping
     public Collection<Film> getAllFilms() {
@@ -63,11 +65,6 @@ public class FilmController {
     }
 
     private long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
         return ++currentMaxId;
     }
 }
