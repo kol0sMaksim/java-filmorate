@@ -39,7 +39,8 @@ class FilmorateApplicationTests {
             "film",
             "description",
             LocalDate.parse("2000-01-01"),
-            100L
+            100L,
+            null
     );
 
     private User user = new User(
@@ -47,7 +48,8 @@ class FilmorateApplicationTests {
             "qwerty@yandex.ru",
             "login",
             "Maks",
-            LocalDate.parse("1996-01-01")
+            LocalDate.parse("1996-01-01"),
+            null
     );
 
     public String parsUserToString(User user) throws JsonProcessingException {
