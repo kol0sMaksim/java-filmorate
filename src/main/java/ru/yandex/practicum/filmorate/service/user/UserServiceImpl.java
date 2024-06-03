@@ -13,7 +13,7 @@ import java.util.Collection;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserServiceImpl implements  UserService{
+public class UserServiceImpl implements UserService {
 
     private UserStorage userStorage;
 
