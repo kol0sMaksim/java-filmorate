@@ -11,6 +11,7 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -90,6 +91,14 @@ public class InMemoryFilmStorage implements FilmStorage {
         }
 
         films.get(id).deleteLike(userId);
+    }
+
+    @Override
+    public Collection<Film> getPopularFilm(int count) {
+        return films.values().stream()
+                .sorted((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()))
+                .limit(count)
+                .collect(Collectors.toList());
     }
 
     private long getNextId() {

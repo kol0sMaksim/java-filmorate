@@ -8,7 +8,6 @@ import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -64,11 +63,6 @@ public class FilmServiceImpl implements FilmService {
     public Collection<Film> getPopularFilm(int count) {
         log.info("Выполнен запрос на получение популярных фильмов");
 
-        Collection<Film> allFilms = filmStorage.getAll();
-
-        return allFilms.stream()
-                .sorted((film1, film2) -> Integer.compare(film2.getLikes().size(), film1.getLikes().size()))
-                .limit(count)
-                .collect(Collectors.toList());
+        return filmStorage.getPopularFilm(count);
     }
 }
