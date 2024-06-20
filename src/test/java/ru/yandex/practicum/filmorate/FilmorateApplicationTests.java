@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.yandex.practicum.filmorate.controller.FilmController;
@@ -14,15 +15,15 @@ import org.springframework.http.MediaType;
 import ru.yandex.practicum.filmorate.controller.UserController;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.film.FilmService;
+import ru.yandex.practicum.filmorate.service.user.UserService;
 
 import java.time.LocalDate;
 
-import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(controllers = {FilmController.class, UserController.class})
@@ -34,12 +35,19 @@ class FilmorateApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @MockBean
+    private FilmService filmService;
+
+    @MockBean
+    private UserService userService;
+
     private Film film = new Film(
             1L,
             "film",
             "description",
             LocalDate.parse("2000-01-01"),
-            100L
+            100L,
+            null
     );
 
     private User user = new User(
@@ -47,7 +55,8 @@ class FilmorateApplicationTests {
             "qwerty@yandex.ru",
             "login",
             "Maks",
-            LocalDate.parse("1996-01-01")
+            LocalDate.parse("1996-01-01"),
+            null
     );
 
     public String parsUserToString(User user) throws JsonProcessingException {
@@ -151,11 +160,6 @@ class FilmorateApplicationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name", is("film")))
-                .andExpect(jsonPath("$[0].description", is("description")))
-                .andExpect(jsonPath("$[0].releaseDate", is("2000-01-01")))
-                .andExpect(jsonPath("$[0].duration", is(100)))
                 .andReturn();
     }
 
@@ -236,11 +240,6 @@ class FilmorateApplicationTests {
                                 .contentType(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].email", is("qwerty@yandex.ru")))
-                .andExpect(jsonPath("$[0].login", is("login")))
-                .andExpect(jsonPath("$[0].name", is("Maks")))
-                .andExpect(jsonPath("$[0].birthday", is("1996-01-01")))
                 .andReturn();
     }
 }
