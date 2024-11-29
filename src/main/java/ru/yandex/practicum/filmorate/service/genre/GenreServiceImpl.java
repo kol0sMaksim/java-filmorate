@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class GenreServiceImpl implements GenreService{
+public class GenreServiceImpl implements GenreService {
 
     private GenreRepository genreRepository;
 
