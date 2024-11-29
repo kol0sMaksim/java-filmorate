@@ -28,8 +28,8 @@ public class FilmRowMapper implements RowMapper<Film> {
         Mpa mpa = new Mpa(rs.getLong("mpa_id"), rs.getString("mpa_name"));
         film.setMpa(mpa);
 
-        List <Genre> genres = new ArrayList<>();
-        Set <Long> genreIds = new HashSet<>();
+        List<Genre> genres = new ArrayList<>();
+        Set<Long> genreIds = new HashSet<>();
         do {
             long genreId = rs.getLong("genre_id");
             if (genreId != 0 && !genreIds.contains(genreId)) {
