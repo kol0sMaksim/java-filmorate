@@ -29,7 +29,7 @@ public class FilmRowMapper implements RowMapper<Film> {
         film.setMpa(mpa);
 
         List <Genre> genres = new ArrayList<>();
-        Set<Long> genreIds = new HashSet<>();
+        Set <Long> genreIds = new HashSet<>();
         do {
             long genreId = rs.getLong("genre_id");
             if (genreId != 0 && !genreIds.contains(genreId)) {
