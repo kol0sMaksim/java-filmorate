@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class GenreRepositoryImpl extends BaseRepository<Genre> implements GenreRepository{
+public class GenreRepositoryImpl extends BaseRepository<Genre> implements GenreRepository {
     private static final String FIND_ALL_GENRE = "SELECT * FROM genre";
     private static final String FIND_BY_ID_GENRE = "SELECT * FROM genre WHERE id = ?";
 

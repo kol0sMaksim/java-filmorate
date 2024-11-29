@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.model.Friendship;
 
 @Slf4j
 @Component
-public class FriendsRepositoryImpl extends BaseRepository<Friendship> implements FriendsRepository{
+public class FriendsRepositoryImpl extends BaseRepository<Friendship> implements FriendsRepository {
 
 
     private static final String ADD_FRIENDS = "INSERT INTO friends (user_id, friend_id) VALUES (?, ?)";

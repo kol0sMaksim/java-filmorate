@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepository{
+public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepository {
     private static final String FIND_ALL_FILM = "SELECT f.id AS film_id,\n" +
             "       f.name AS film_name,\n" +
             "       f.description AS film_description,\n" +

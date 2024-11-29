@@ -9,7 +9,7 @@ import ru.yandex.practicum.filmorate.model.Like;
 
 @Slf4j
 @Component
-public class LikeRepositoryImpl extends BaseRepository<Like> implements LikeRepository{
+public class LikeRepositoryImpl extends BaseRepository<Like> implements LikeRepository {
 
     public LikeRepositoryImpl(JdbcTemplate jdbc, RowMapper<Like> mapper) {
         super(jdbc, mapper);

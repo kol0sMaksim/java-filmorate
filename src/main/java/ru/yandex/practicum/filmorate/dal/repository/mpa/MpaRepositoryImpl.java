@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Slf4j
 @Component
-public class MpaRepositoryImpl extends BaseRepository<Mpa> implements MpaRepository{
+public class MpaRepositoryImpl extends BaseRepository<Mpa> implements MpaRepository {
     private static final String FIND_ALL_MPA = "SELECT * FROM mpa";
     private static final String FIND_BY_ID_MAP = "SELECT * FROM mpa WHERE id = ?";
 
