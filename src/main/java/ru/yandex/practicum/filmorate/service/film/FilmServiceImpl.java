@@ -106,9 +106,12 @@ public class FilmServiceImpl implements FilmService {
     }
 
     @Override
-    public Collection<Film> getPopularFilm(int count) {
+    public Collection<FilmDto> getPopularFilm(int count) {
         log.info("Выполнен запрос на получение популярных фильмов");
 
-        return filmRepository.getPopularFilm(count);
+        return filmRepository.getPopularFilm(count)
+                .stream()
+                .map(FilmMapper::mapToFilmDto)
+                .collect(Collectors.toList());
     }
 }

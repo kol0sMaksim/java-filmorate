@@ -22,12 +22,13 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
             "       f.duration AS film_duration,\n" +
             "       m.id AS mpa_id,\n" +
             "       m.name AS mpa_name,\n" +
-            "       g.id AS genre_id,\n" +
-            "       g.name AS genre_name\n" +
+            "       GROUP_CONCAT(DISTINCT g.id) AS genre_ids,\n" +
+            "       GROUP_CONCAT(DISTINCT g.name) AS genre_names\n" +
             "FROM films f\n" +
             "LEFT JOIN mpa m ON f.mpa_id = m.id\n" +
             "LEFT JOIN film_genre fg ON f.id = fg.film_id\n" +
-            "LEFT JOIN genre g ON fg.genre_id = g.id;";
+            "LEFT JOIN genre g ON fg.genre_id = g.id\n" +
+            "GROUP BY f.id;\n";
 
     private static final String CREATE_FILM = "INSERT INTO films (name, description, release_date, duration, mpa_id) " +
             "VALUES (?, ?, ?, ?, ?)";
@@ -35,20 +36,21 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
     private static final String UPDATE_FILM = "UPDATE films SET name=?, " +
             "description=?, release_date=?, duration=?, mpa_id=? WHERE id=?";
 
-    private static final String FIND_BY_ID_FILM = "SELECT f.id AS film_id,\n" +
-            "       f.name AS film_name,\n" +
-            "       f.description AS film_description,\n" +
-            "       f.release_date AS film_release_date,\n" +
-            "       f.duration AS film_duration,\n" +
-            "       m.id AS mpa_id,\n" +
+    private static final String FIND_BY_ID_FILM = "SELECT f.id AS film_id, \n" +
+            "       f.name AS film_name, \n" +
+            "       f.description AS film_description, \n" +
+            "       f.release_date AS film_release_date, \n" +
+            "       f.duration AS film_duration, \n" +
+            "       m.id AS mpa_id, \n" +
             "       m.name AS mpa_name,\n" +
-            "       g.id AS genre_id,\n" +
-            "       g.name AS genre_name\n" +
+            "       GROUP_CONCAT(g.id) AS genre_ids, \n" +
+            "       GROUP_CONCAT(g.name) AS genre_names\n" +
             "FROM films f\n" +
             "LEFT JOIN mpa m ON f.mpa_id = m.id\n" +
             "LEFT JOIN film_genre fg ON f.id = fg.film_id\n" +
             "LEFT JOIN genre g ON fg.genre_id = g.id\n" +
-            "WHERE f.id = ?;";
+            "WHERE f.id = ?\n" +
+            "GROUP BY f.id;";
 
     private static final String GET_POPULAR_FILMS = "SELECT f.id AS film_id,\n" +
             "       f.name AS film_name,\n" +
@@ -57,8 +59,8 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
             "       f.duration AS film_duration,\n" +
             "       m.id AS mpa_id,\n" +
             "       m.name AS mpa_name,\n" +
-            "       g.id AS genre_id,\n" +
-            "       g.name AS genre_name\n" +
+            "       GROUP_CONCAT(DISTINCT g.id) AS genre_ids,\n" +
+            "       GROUP_CONCAT(DISTINCT g.name) AS genre_names\n" +
             "FROM films f\n" +
             "LEFT JOIN mpa m ON f.mpa_id = m.id\n" +
             "LEFT JOIN film_genre fg ON f.id = fg.film_id\n" +
@@ -68,8 +70,9 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
             "    FROM likes\n" +
             "    GROUP BY film_id\n" +
             ") l ON f.id = l.film_id\n" +
-            "ORDER BY l.like_count DESC \n" +
-            "LIMIT 10;";
+            "GROUP BY f.id\n" +
+            "ORDER BY l.like_count DESC\n" +
+            "LIMIT ?;";
 
     private static final String ADD_FILM_GENRE = "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)";
 
@@ -127,6 +130,6 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
     @Override
     public Collection<Film> getPopularFilm(int count) {
         log.debug("Выполнен запрос в БД на получение списка самых популярных фильмов");
-        return findMany(GET_POPULAR_FILMS);
+        return findMany(GET_POPULAR_FILMS, count);
     }
 }
