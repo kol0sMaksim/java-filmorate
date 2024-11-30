@@ -1,13 +1,12 @@
 package ru.yandex.practicum.filmorate.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.MpaDto;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class MpaMapper {
-    public static Mpa mapToMpa(MpaDto mpaDto) {
+    public Mpa mapToMpa(MpaDto mpaDto) {
         Mpa mpa = new Mpa();
         mpa.setId(mpaDto.getId());
         mpa.setName(mpaDto.getName());
@@ -15,7 +14,7 @@ public class MpaMapper {
         return mpa;
     }
 
-    public static MpaDto mapToMpaDto(Mpa mpa) {
+    public MpaDto mapToMpaDto(Mpa mpa) {
         MpaDto mpaDto = new MpaDto();
         mpaDto.setId(mpa.getId());
         mpaDto.setName(mpa.getName());

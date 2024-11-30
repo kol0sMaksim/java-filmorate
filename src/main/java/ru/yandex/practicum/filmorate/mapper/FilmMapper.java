@@ -1,13 +1,12 @@
 package ru.yandex.practicum.filmorate.mapper;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.model.Film;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Component
 public class FilmMapper {
-    public static Film mapToFilm(FilmDto filmDto) {
+    public Film mapToFilm(FilmDto filmDto) {
         Film film = new Film();
         film.setName(filmDto.getName());
         film.setDescription(filmDto.getDescription());
@@ -19,7 +18,7 @@ public class FilmMapper {
         return film;
     }
 
-    public static FilmDto mapToFilmDto(Film film) {
+    public FilmDto mapToFilmDto(Film film) {
         FilmDto filmDto = new FilmDto();
         filmDto.setId(film.getId());
         filmDto.setName(film.getName());

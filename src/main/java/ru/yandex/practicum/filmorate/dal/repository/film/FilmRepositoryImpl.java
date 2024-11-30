@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.dal.repository.BaseRepository;
+import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Genre;
 
@@ -74,8 +75,6 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
             "ORDER BY l.like_count DESC\n" +
             "LIMIT ?;";
 
-    private static final String ADD_FILM_GENRE = "INSERT INTO film_genre (film_id, genre_id) VALUES (?, ?)";
-
     public FilmRepositoryImpl(JdbcTemplate jdbc, RowMapper<Film> mapper) {
         super(jdbc, mapper);
     }
@@ -99,15 +98,31 @@ public class FilmRepositoryImpl extends BaseRepository<Film> implements FilmRepo
         );
         film.setId(id);
 
+        StringBuilder genreValues = new StringBuilder();
         for (Genre genre : film.getGenres()) {
-            update(ADD_FILM_GENRE, film.getId(), genre.getId());
+            if (genreValues.length() > 0) {
+                genreValues.append(", ");
+            }
+            genreValues.append("(").append(id).append(", ").append(genre.getId()).append(")");
         }
+
+        if (genreValues.length() > 0) {
+            String addFilmGenre = "INSERT INTO film_genre (film_id, genre_id) VALUES " + genreValues.toString();
+            update(addFilmGenre);
+        }
+
         return film;
     }
 
     @Override
     public Film updateFilm(Film film) {
         log.debug("Выполнен запрос в БД на обновление фильма с id={}", film.getId());
+
+        if (getFilmById(film.getId()).isEmpty()) {
+            log.warn("Фильм с id={} не найден", film.getId());
+            throw new NotFoundException("Фильм не найден с id: " + film.getId());
+        }
+
         update(
                 UPDATE_FILM,
                 film.getName(),

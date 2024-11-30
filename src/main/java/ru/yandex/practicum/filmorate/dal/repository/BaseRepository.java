@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.dal.repository;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -12,6 +13,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 public class BaseRepository<T> {
     protected final JdbcTemplate jdbc;
@@ -38,7 +40,7 @@ public class BaseRepository<T> {
     protected void update(String query, Object... params) {
         int rowsUpdated = jdbc.update(query, params);
         if (rowsUpdated == 0) {
-            throw new InternalServerException("Не удалось обновить данные");
+            log.warn("Не удалось обновить данные по заросу: " + query);
         }
     }
 
